@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt #для графиков
 from pylab import mpl
 import math
-
+from Form import Application
 # Аппроксимация полиномиальной кривой с одной переменной
 
 
@@ -61,23 +61,28 @@ def tkek():
     y5.grid(row=1, column=5)
     y6.grid(row=1, column=6)
     y7.grid(row=1, column=7)
+    lstX = [x1, x2, x3, x4, x5, x6, x7]
+    lstY = [y1, y2, y3, y4, y5, y6, y7]
     tk.Button(root,
               text='OK',
               command=root.quit).grid(row=3,
                                       column=4,
                                       sticky=tk.W,
                                       pady=4)
-    tk.mainloop()
     global x, y, interpol
+    for i in range(len(lstX)):
+        lstX[i].insert(0, x[i])
+        lstY[i].insert(0, y[i])
+    tk.mainloop()
     if (len(x) == 0) and (len(y) == 0):
         tk.Label(root,
                  text="interpolation").grid(row=2)
         interpoll = tk.Entry(root)
         interpoll.grid(row=2, column=1)
         X =  [float(x1.get()), float(x2.get()), float(x3.get()), float(x4.get()), float(x5.get()), float(x6.get()),
-             float(x7.get())]
+              float(x7.get())]
         Y =  [float(y1.get()), float(y2.get()), float(y3.get()), float(y4.get()), float(y5.get()), float(y6.get()),
-             float(y7.get())]
+              float(y7.get())]
         return X, Y
     else:
         X = [x1.get(), x2.get(), x3.get(), x4.get(), x5.get(), x6.get(),
@@ -224,6 +229,7 @@ def calculate(data_x, parameters):
 def draw(data_x, data_y_new, data_y_old):
     plt.plot(data_x, data_y_new, label="подгоночная кривая", color="black")
     plt.scatter(data_x, data_y_old, label="дискретные данные")
+    plt.plot(data_x, data_y_old)
 
 print("Введите номер таблицы: ", end="")
 table = int(input())
