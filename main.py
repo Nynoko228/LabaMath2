@@ -7,6 +7,31 @@ from Form import Application
 
 import tkinter as tk #для интерфейса
 
+def formula():
+    global x, y
+    a = ''
+    b = ''
+    fin = ''
+    # for i in range(8):
+    #     for j in range(8):
+    #         if (i != j):
+    #             a += fr'({interpol}-({x[j]}))'
+    #             b += fr'{x[i]}-({x[j]}))'
+    #     if (i != 7):
+    #         fin += fr'${y[i]}' r'\frac{' fr'{a} 'r'}' r'{' fr'{b}' r'}+$'
+    #     else:
+    #         fin += fr'${y[i]}' r'\frac{' fr'{a} 'r'}' r'{' fr'{b}' r'}$'
+    for i in range(7):
+        pass
+        # Иван сделай норм формулу латеха, а то я не эбу, ток pass убери когда сделаешь
+        # fin += fr'$y={Math.Round(a, 2)}\cdot x^{2}+{Math.Round(b, 2)}\cdot x +{Math.Round(c, 2)}={arrY2[i]};'
+
+
+    root = tk.Toplevel()
+    # root = tk.Tk()
+    app = Application(fin, master=root)
+    app.mainloop()
+
 def mainWidget():
     root1 = tk.Tk()
     root1.geometry("350x350")
