@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt #для графиков
 from pylab import mpl
 import math
+import numpy
 from Form import Application
 # Аппроксимация полиномиальной кривой с одной переменной
 
@@ -140,8 +141,8 @@ def HelloWidget(lstx, lsty):
 
     tk.mainloop()
 
-# Завершите расчет соответствующих переменных перед расчетом параметров подобранной кривой
-def polynomial_fitting(data_x,data_y):
+# Функция podgonka высчитывает коэффициенты для системы нормальных уравнений
+def podgonka(data_x,data_y):
     size=len(data_x)
     i=0
     sum_x = 0
@@ -164,6 +165,9 @@ def polynomial_fitting(data_x,data_y):
         i += 1;
     average_x=sum_x/size
     average_y=sum_y/size
+    # print([[size, sum_x, sum_sqare_x, sum_y],
+    #         [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
+    #         [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]])
     return [[size, sum_x, sum_sqare_x, sum_y],
             [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
             [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]]
@@ -181,30 +185,30 @@ def calculate_parameter(data):
     line_size = len(data)
 
     # Преобразовать определитель в определитель верхнего треугольника
-    while j < line_size - 1:
-        line = data[j]
-        temp = line[j]
+    while i< line_size - 1:
+        line = data[i]
+        temp = line[i]
         templete = []
         for x in line:
             x = x / temp
             templete.append(x)
-        data[j] = templete
+        data[i] = templete
         # flag обозначает количество строк, которые следует удалить
-        flag = j + 1
+        flag = i + 1
         while flag < line_size:
             templete1 = []
-            temp1 = data[flag][j]
-            i = 0
+            temp1 = data[flag][i]
+            j = 0
             for x1 in data[flag]:
                 if x1 != 0:
-                    x1 = x1 - (temp1 * templete[i])
+                    x1 = x1 - (temp1 * templete[j])
                     templete1.append(x1)
                 else:
                     templete1.append(0)
-                i += 1
+                j += 1
             data[flag] = templete1
             flag += 1
-        j += 1
+        i += 1
 
         # Поиск соответствующего значения параметра
 
@@ -225,8 +229,7 @@ def calculate_parameter(data):
         else:
             flag_j = (rol_size - flag_rol - 2)
             temp2 = operate_line[rol_size - 1]
-            # result_flag - это флаг для доступа к решению, которое было решено.
-            result_flag = 0
+            result_flag = 0 # это флаг для доступа к решению, которое было решено.
             while flag_j > 0:
                 temp2 -= operate_line[flag_rol + flag_j] * parameters[result_flag]
                 result_flag += 1
@@ -242,18 +245,16 @@ def calculate_parameter(data):
 
 
 def calculate(data_x, parameters):
-    datay = []
+    data_y = []
     for x in data_x:
-        datay.append(parameters[2] + parameters[1] * x + parameters[0] * x * x)
-    return datay
+        data_y.append(parameters[2] + parameters[1] * x + parameters[0] * x * x)
+    print(data_y)
+    return data_y
 
-
-"" "Полный функциональный чертеж" ""
-
-
+# Функция draw рисует наши кривые на координатной плоскости
 def draw(data_x, data_y_new, data_y_old):
     plt.plot(data_x, data_y_new, label="подгоночная кривая", color="black")
-    plt.scatter(data_x, data_y_old, label="дискретные данные")
+    plt.scatter(data_x, data_y_old, label="табличные данные")
     plt.plot(data_x, data_y_old)
 
 print("Введите номер таблицы: ", end="")
@@ -306,16 +307,20 @@ match table:
         y = [0.4, 0.16, 2.5, 4.9, 9, 100, 120]
         HelloWidget(x, y)
 
-data = polynomial_fitting(x, y)
-parameters = calculate_parameter(data)
-for w in parameters:
-    print(w)
-newData = calculate(x, parameters)
+data = podgonka(x, y)
+print(data)
+data1 = [data[0][-1:], data[1][-1:], data[2][-1:]]
+data2 = [data[0][:-1], data[1][:-1], data[2][:-1]]
+print("Значения a0, a1 и a2:")
+param = numpy.linalg.solve(data2, data1)
+print(numpy.linalg.solve(data2, data1))
+print("Новые Y")
+newData = calculate(x, [param[2][0], param[1][0], param[0][0]])
 draw(x, newData, y)
 
 mpl.rcParams['font.sans-serif'] = ['Arial']
 mpl.rcParams['axes.unicode_minus'] = False
-plt.title("Данные подгонки полинома с одной переменной")
+plt.title(r"$y=a_{0}+a_{1}x+a_{2}x^{2}$")
 plt.legend(loc="upper left")
 plt.show()
 
