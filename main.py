@@ -10,9 +10,10 @@ import tkinter as tk #для интерфейса
 
 def formula():
     global x, y
-    a = ''
-    b = ''
-    fin = ''
+    data = podgonka(x, y)
+    fin =  rf"${data[0][0]}*a_{0}+{data[0][1]}*a_{1} + {data[0][2]}*a_{2}={data[0][3]};$"
+    fin += rf" ${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"
+    fin += rf" ${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"
     # for i in range(8):
     #     for j in range(8):
     #         if (i != j):
@@ -48,6 +49,10 @@ def mainWidget():
               text='N',
               command=root1.quit,
               font=("Helvetica 11")).place(x=170, y=180)
+    tk.Button(root1,
+              text='Formula',
+              command=formula,
+              font=("Helvetica 11")).place(x=150, y=280)
 
     tk.mainloop()
 def tkek():
@@ -95,7 +100,7 @@ def tkek():
                                       column=4,
                                       sticky=tk.W,
                                       pady=4)
-    global x, y, interpol
+    global x, y
     for i in range(len(lstX)):
         lstX[i].insert(0, x[i])
         lstY[i].insert(0, y[i])
@@ -121,7 +126,28 @@ def tkek():
         for i in range(len(Y)):
             if Y[i] != "":
                 y[i] = float(Y[i])
+    grafik()
 
+def grafik():
+    global x, y
+    data = podgonka(x, y)
+    print(data)
+    data1 = [data[0][-1:], data[1][-1:], data[2][-1:]]
+    data2 = [data[0][:-1], data[1][:-1], data[2][:-1]]
+    print("Значения a0, a1 и a2:")
+    param = numpy.linalg.solve(data2, data1)
+    print(numpy.linalg.solve(data2, data1))
+    print("Новые Y")
+    newData = calculate(x, [param[2][0], param[1][0], param[0][0]])
+    draw(x, newData, y)
+    form = r'$\left\{\begin{matrix} a_{0}n+a_{1}\sum x + a_{2}\sum x^{2}=\sum y\\  ' \
+           r'a_{0}\sum x+a_{1}\sum x^{2} + a_{2}\sum x^{3}=\sum yx \\ ' \
+           r'a_{0}\sum x^{2}+a_{1}\sum x^{3} + a_{2}\sum x^{4}=\sum yx^{2} \end{matrix}\right.$'
+    mpl.rcParams['font.sans-serif'] = ['Arial']
+    mpl.rcParams['axes.unicode_minus'] = False
+    plt.title(r"$y=a_{0}+a_{1}x+a_{2}x^{2}$")
+    plt.legend(loc="upper left")
+    plt.show()
 
 def HelloWidget(lstx, lsty):
     root1 = tk.Tk()
@@ -136,8 +162,13 @@ def HelloWidget(lstx, lsty):
               font=("Helvetica 11")).place(x=95, y=180)
     tk.Button(root1,
               text='N',
-              command=root1.quit,
+              command=grafik,
               font=("Helvetica 11")).place(x=200, y=180)
+
+    tk.Button(root1,
+              text='Formula',
+              command=formula,
+              font=("Helvetica 11")).place(x=150, y=280)
 
     tk.mainloop()
 
@@ -171,75 +202,6 @@ def podgonka(data_x,data_y):
     return [[size, sum_x, sum_sqare_x, sum_y],
             [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
             [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]]
-
-
-# Завершите расчет параметров аппроксимирующей кривой
-# При решении уравнения используйте метод исключения Гаусса для вычисления соответствующего значения параметра
-
-
-
-def calculate_parameter(data):
-    # i используется для управления элементами столбца, line - это элемент строки, j используется для управления количеством циклов, а данные используются для хранения локальных переменных. Сохраните измененное значение
-    i = 0;
-    j = 0;
-    line_size = len(data)
-
-    # Преобразовать определитель в определитель верхнего треугольника
-    while i< line_size - 1:
-        line = data[i]
-        temp = line[i]
-        templete = []
-        for x in line:
-            x = x / temp
-            templete.append(x)
-        data[i] = templete
-        # flag обозначает количество строк, которые следует удалить
-        flag = i + 1
-        while flag < line_size:
-            templete1 = []
-            temp1 = data[flag][i]
-            j = 0
-            for x1 in data[flag]:
-                if x1 != 0:
-                    x1 = x1 - (temp1 * templete[j])
-                    templete1.append(x1)
-                else:
-                    templete1.append(0)
-                j += 1
-            data[flag] = templete1
-            flag += 1
-        i += 1
-
-        # Поиск соответствующего значения параметра
-
-
-    parameters = []
-    i = line_size - 1
-    # j Идентификация минус количество элементов
-    # flag_rolУкажите, какой столбец кроме
-    flag_j = 0
-    rol_size = len(data[0])
-    flag_rol = rol_size - 2
-    # Получить количество решений
-    while i >= 0:
-        operate_line = data[i]
-        if i == line_size - 1:
-            parameter = operate_line[rol_size - 1] / operate_line[flag_rol]
-            parameters.append(parameter)
-        else:
-            flag_j = (rol_size - flag_rol - 2)
-            temp2 = operate_line[rol_size - 1]
-            result_flag = 0 # это флаг для доступа к решению, которое было решено.
-            while flag_j > 0:
-                temp2 -= operate_line[flag_rol + flag_j] * parameters[result_flag]
-                result_flag += 1
-                flag_j -= 1
-            parameter = temp2 / operate_line[flag_rol]
-            parameters.append(parameter)
-        flag_rol -= 1
-        i -= 1
-    return parameters
-
 
 # Вычислить значение подобранной кривой
 
@@ -307,22 +269,7 @@ match table:
         y = [0.4, 0.16, 2.5, 4.9, 9, 100, 120]
         HelloWidget(x, y)
 
-data = podgonka(x, y)
-print(data)
-data1 = [data[0][-1:], data[1][-1:], data[2][-1:]]
-data2 = [data[0][:-1], data[1][:-1], data[2][:-1]]
-print("Значения a0, a1 и a2:")
-param = numpy.linalg.solve(data2, data1)
-print(numpy.linalg.solve(data2, data1))
-print("Новые Y")
-newData = calculate(x, [param[2][0], param[1][0], param[0][0]])
-draw(x, newData, y)
 
-mpl.rcParams['font.sans-serif'] = ['Arial']
-mpl.rcParams['axes.unicode_minus'] = False
-plt.title(r"$y=a_{0}+a_{1}x+a_{2}x^{2}$")
-plt.legend(loc="upper left")
-plt.show()
 
 
 
