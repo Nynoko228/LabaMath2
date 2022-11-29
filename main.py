@@ -14,21 +14,6 @@ def formula():
     fin =  rf"${data[0][0]}*a_{0}+{data[0][1]}*a_{1} + {data[0][2]}*a_{2}={data[0][3]};$"
     fin += rf" ${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"
     fin += rf" ${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"
-    # for i in range(8):
-    #     for j in range(8):
-    #         if (i != j):
-    #             a += fr'({interpol}-({x[j]}))'
-    #             b += fr'{x[i]}-({x[j]}))'
-    #     if (i != 7):
-    #         fin += fr'${y[i]}' r'\frac{' fr'{a} 'r'}' r'{' fr'{b}' r'}+$'
-    #     else:
-    #         fin += fr'${y[i]}' r'\frac{' fr'{a} 'r'}' r'{' fr'{b}' r'}$'
-    for i in range(7):
-        pass
-        # Иван сделай норм формулу латеха, а то я не эбу, ток pass убери когда сделаешь
-        # fin += fr'$y={Math.Round(a, 2)}\cdot x^{2}+{Math.Round(b, 2)}\cdot x +{Math.Round(c, 2)}={arrY2[i]};'
-
-
     root = tk.Toplevel()
     # root = tk.Tk()
     app = Application(fin, master=root)
@@ -145,7 +130,7 @@ def grafik():
            r'a_{0}\sum x^{2}+a_{1}\sum x^{3} + a_{2}\sum x^{4}=\sum yx^{2} \end{matrix}\right.$'
     mpl.rcParams['font.sans-serif'] = ['Arial']
     mpl.rcParams['axes.unicode_minus'] = False
-    plt.title(r"$y=a_{0}+a_{1}x+a_{2}x^{2}$")
+    plt.title(rf"$y={param[0][0]}+{param[1][0]}x+{param[2][0]}x^{2}$")
     plt.legend(loc="upper left")
     plt.show()
 
@@ -165,10 +150,10 @@ def HelloWidget(lstx, lsty):
               command=grafik,
               font=("Helvetica 11")).place(x=200, y=180)
 
-    tk.Button(root1,
-              text='Formula',
-              command=formula,
-              font=("Helvetica 11")).place(x=150, y=280)
+    # tk.Button(root1,
+    #           text='Formula',
+    #           command=formula,
+    #           font=("Helvetica 11")).place(x=150, y=280)
 
     tk.mainloop()
 
@@ -220,54 +205,57 @@ def draw(data_x, data_y_new, data_y_old):
     plt.plot(data_x, data_y_old)
 
 print("Введите номер таблицы: ", end="")
-table = int(input())
-match table:
-    case 0:
-        x = ""
-        y = ""
-        x, y = tkek()
-    case 1:
-        x = [-2, 0, 1, 3, 5, 6, 8]
-        y = [5, -1, 2, 10, 24, 36, 38]
-        HelloWidget(x, y)
-    case 2:
-        x = [0.5, 1, 1.5, 2, 2.5, 3, 3.5]
-        y = [0.4, 0.3, 1, 1.7, 2.1, 3.4, 4]
-        HelloWidget(x, y)
-    case 3:
-        x = [0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8]
-        y = [0.43, 0.94, 1.91, 3.01, 4, 4.56, 5]
-        HelloWidget(x, y)
-
-    case 4:
-        x = [4.5, 5.0, 5.5, 6.0, 6.5, 7, 7.5]
-        y = [7.7, 9.4, 11.4, 13.6, 15.6, 17, 18]
-        HelloWidget(x, y)
-    case 5:
-        x = [0, 0.5, 1, 1.5, 2, 2.5, 3]
-        y = [25, 26, 4, 7, 6, 13, 20]
-        HelloWidget(x, y)
-    case 6:
-        x = [1, 1.5, 2, 2.5, 3, 3.5, 4]
-        y = [0.22, 23, 31, 43, 56, 82, 60]
-        HelloWidget(x, y)
-    case 7:
-        x = [4.5, 5, 5.5, 6, 6.5, 7, 7.5]
-        y = [7.7, 9.4, 11.4, 13.6, 15.6, 18.6, 20]
-        HelloWidget(x, y)
-    case 8:
-        x = [-2, -1, 0, 1, 2, 3, 4]
-        y = [4, 0, -1, 0, 5, 10, 12]
-        HelloWidget(x, y)
-    case 9:
-        x = [0.1, 0.2, 0.4, 0.5, 0.6, 0.8, 1]
-        y = [1, 2, 4, 7, 10, 16, 13]
-        HelloWidget(x, y)
-
-    case 10:
-        x = [2, 4, 5, 7, 9, 10, 12]
-        y = [0.4, 0.16, 2.5, 4.9, 9, 100, 120]
-        HelloWidget(x, y)
+x = [-5, -3, -1, 1, 3, 5, 7, 9]
+y = [10, 12, 14, 30, 31, 25, 25, 15]
+HelloWidget(x, y)
+# table = int(input())
+# match table:
+#     case 0:
+#         x = ""
+#         y = ""
+#         x, y = tkek()
+#     case 1:
+#         x = [-2, 0, 1, 3, 5, 6, 8]
+#         y = [5, -1, 2, 10, 24, 36, 38]
+#         HelloWidget(x, y)
+#     case 2:
+#         x = [0.5, 1, 1.5, 2, 2.5, 3, 3.5]
+#         y = [0.4, 0.3, 1, 1.7, 2.1, 3.4, 4]
+#         HelloWidget(x, y)
+#     case 3:
+#         x = [0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8]
+#         y = [0.43, 0.94, 1.91, 3.01, 4, 4.56, 5]
+#         HelloWidget(x, y)
+#
+#     case 4:
+#         x = [4.5, 5.0, 5.5, 6.0, 6.5, 7, 7.5]
+#         y = [7.7, 9.4, 11.4, 13.6, 15.6, 17, 18]
+#         HelloWidget(x, y)
+#     case 5:
+#         x = [0, 0.5, 1, 1.5, 2, 2.5, 3]
+#         y = [25, 26, 4, 7, 6, 13, 20]
+#         HelloWidget(x, y)
+#     case 6:
+#         x = [1, 1.5, 2, 2.5, 3, 3.5, 4]
+#         y = [0.22, 23, 31, 43, 56, 82, 60]
+#         HelloWidget(x, y)
+#     case 7:
+#         x = [4.5, 5, 5.5, 6, 6.5, 7, 7.5]
+#         y = [7.7, 9.4, 11.4, 13.6, 15.6, 18.6, 20]
+#         HelloWidget(x, y)
+#     case 8:
+#         x = [-2, -1, 0, 1, 2, 3, 4]
+#         y = [4, 0, -1, 0, 5, 10, 12]
+#         HelloWidget(x, y)
+#     case 9:
+#         x = [0.1, 0.2, 0.4, 0.5, 0.6, 0.8, 1]
+#         y = [1, 2, 4, 7, 10, 16, 13]
+#         HelloWidget(x, y)
+#
+#     case 10:
+#         x = [2, 4, 5, 7, 9, 10, 12]
+#         y = [0.4, 0.16, 2.5, 4.9, 9, 100, 120]
+#         HelloWidget(x, y)
 
 
 
