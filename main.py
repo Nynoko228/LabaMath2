@@ -3,6 +3,7 @@ from pylab import mpl
 import math
 import numpy
 from Form import Application
+from scipy.signal import savgol_filter
 # Аппроксимация полиномиальной кривой с одной переменной
 
 
@@ -208,9 +209,35 @@ def calculate(data_x, parameters):
 
 # Функция draw рисует наши кривые на координатной плоскости
 def draw(data_x, data_y_new, data_y_old):
-    plt.plot(data_x, data_y_new, label="подгоночная кривая", color="black")
-    plt.scatter(data_x, data_y_old, label="табличные данные")
-    plt.plot(data_x, data_y_old)
+    data_y_old = savgol_filter(data_y_old, 7, 2)
+    # win =
+    # filt = numpy.ones(win) / win
+    # data_y_new = numpy.convolve(data_y_new, filt, mode='same')
+    # data_x = numpy.convolve(data_x, filt, mode='same')
+    # data_y_old = numpy.convolve(data_y_old, filt, mode='same')
+
+    # w = numpy.hanning(7)
+    # data_x = numpy.convolve(w / w.sum(), data_y_old, mode='same')
+    # data_y_old = numpy.convolve(w / w.sum(), data_y_old, mode='same')
+    # data_y_new = numpy.convolve(w / w.sum(), data_y_new, mode='same')
+    # length = len(data_x) - 1
+    # for i in range(len(data_x) - 1):
+    #     data_x.append((data_x[i] + data_x[i+1]) / 2)
+    #     data_y_new.append((data_y_new[i] + data_y_new[i + 1]) / 2)
+    #     data_y_old.append((data_y_old[i] + data_y_old[i + 1]) / 2)
+    # sorted(data_x)
+    # sorted(data_y_new)
+    # sorted(data_y_old)
+    # for i in range(len(data_x) - 1):
+    #     data_x.append((data_x[i] + data_x[i+1]) / 2)
+    #     data_y_new.append((data_y_new[i] + data_y_new[i + 1]) / 2)
+    #     data_y_old.append((data_y_old[i] + data_y_old[i + 1]) / 2)
+    # data_x += [(data_x[i] + data_x[i+1])/2 for i in range(len(data_x)-1)]
+    # data_y_new += [(data_y_new[i] + data_y_new[i+1])/2 for i in range(len(data_y_new)-1)]
+    # data_y_old += [(data_y_old[i] + data_y_old[i+1])/2 for i in range(len(data_y_old)-1)]
+    plt.plot(sorted(data_x), sorted(data_y_new), label="подгоночная кривая", color="black")
+    plt.scatter(sorted(data_x), sorted(data_y_old), label="табличные данные")
+    plt.plot(sorted(data_x), sorted(data_y_old))
 
 
 print("Введите номер таблицы: ", end="")
