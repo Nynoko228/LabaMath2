@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt #для графиков
+import matplotlib.pyplot as plt  # для графиков
 from pylab import mpl
 import math
 import numpy
@@ -6,33 +6,20 @@ from Form import Application
 # Аппроксимация полиномиальной кривой с одной переменной
 
 
-import tkinter as tk #для интерфейса
+import tkinter as tk  # для интерфейса
+
 
 def formula():
     global x, y
     data = podgonka(x, y)
-    fin =  rf"${data[0][0]}*a_{0}+{data[0][1]}*a_{1} + {data[0][2]}*a_{2}={data[0][3]};$"
-    fin += rf" ${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"
-    fin += rf" ${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"
-    # for i in range(8):
-    #     for j in range(8):
-    #         if (i != j):
-    #             a += fr'({interpol}-({x[j]}))'
-    #             b += fr'{x[i]}-({x[j]}))'
-    #     if (i != 7):
-    #         fin += fr'${y[i]}' r'\frac{' fr'{a} 'r'}' r'{' fr'{b}' r'}+$'
-    #     else:
-    #         fin += fr'${y[i]}' r'\frac{' fr'{a} 'r'}' r'{' fr'{b}' r'}$'
-    for i in range(7):
-        pass
-        # Иван сделай норм формулу латеха, а то я не эбу, ток pass убери когда сделаешь
-        # fin += fr'$y={Math.Round(a, 2)}\cdot x^{2}+{Math.Round(b, 2)}\cdot x +{Math.Round(c, 2)}={arrY2[i]};'
-
-
+    fin = []
+    fin += [rf"${data[0][0]}*a_{0}+{data[0][1]}*a_{1} + {data[0][2]}*a_{2}={data[0][3]};$"]
+    fin += [rf" ${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"]
+    fin += [rf" ${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"]
     root = tk.Toplevel()
-    # root = tk.Tk()
     app = Application(fin, master=root)
     app.mainloop()
+
 
 def mainWidget():
     root1 = tk.Tk()
@@ -55,6 +42,8 @@ def mainWidget():
               font=("Helvetica 11")).place(x=150, y=280)
 
     tk.mainloop()
+
+
 def tkek():
     root = tk.Tk()
     tk.Label(root,
@@ -76,7 +65,6 @@ def tkek():
     y5 = tk.Entry(root)
     y6 = tk.Entry(root)
     y7 = tk.Entry(root)
-
 
     x1.grid(row=0, column=1)
     x2.grid(row=0, column=2)
@@ -110,10 +98,10 @@ def tkek():
                  text="interpolation").grid(row=2)
         interpoll = tk.Entry(root)
         interpoll.grid(row=2, column=1)
-        X =  [float(x1.get()), float(x2.get()), float(x3.get()), float(x4.get()), float(x5.get()), float(x6.get()),
-              float(x7.get())]
-        Y =  [float(y1.get()), float(y2.get()), float(y3.get()), float(y4.get()), float(y5.get()), float(y6.get()),
-              float(y7.get())]
+        X = [float(x1.get()), float(x2.get()), float(x3.get()), float(x4.get()), float(x5.get()), float(x6.get()),
+             float(x7.get())]
+        Y = [float(y1.get()), float(y2.get()), float(y3.get()), float(y4.get()), float(y5.get()), float(y6.get()),
+             float(y7.get())]
         return X, Y
     else:
         X = [x1.get(), x2.get(), x3.get(), x4.get(), x5.get(), x6.get(),
@@ -127,6 +115,7 @@ def tkek():
             if Y[i] != "":
                 y[i] = float(Y[i])
     grafik()
+
 
 def grafik():
     global x, y
@@ -148,6 +137,7 @@ def grafik():
     plt.title(r"$y=a_{0}+a_{1}x+a_{2}x^{2}$")
     plt.legend(loc="upper left")
     plt.show()
+
 
 def HelloWidget(lstx, lsty):
     root1 = tk.Tk()
@@ -172,12 +162,13 @@ def HelloWidget(lstx, lsty):
 
     tk.mainloop()
 
+
 # Функция podgonka высчитывает коэффициенты для системы нормальных уравнений
-def podgonka(data_x,data_y):
-    size=len(data_x)
-    i=0
+def podgonka(data_x, data_y):
+    size = len(data_x)
+    i = 0
     sum_x = 0
-    sum_sqare_x =0
+    sum_sqare_x = 0
     sum_third_power_x = 0
     sum_four_power_x = 0
     average_x = 0
@@ -185,23 +176,24 @@ def podgonka(data_x,data_y):
     sum_y = 0
     sum_xy = 0
     sum_sqare_xy = 0
-    while i<size:
+    while i < size:
         sum_x += data_x[i]
         sum_y += data_y[i]
-        sum_sqare_x += math.pow(data_x[i],2)
-        sum_third_power_x +=math.pow(data_x[i],3)
-        sum_four_power_x +=math.pow(data_x[i],4)
-        sum_xy +=data_x[i]*data_y[i]
-        sum_sqare_xy +=math.pow(data_x[i],2)*data_y[i]
+        sum_sqare_x += math.pow(data_x[i], 2)
+        sum_third_power_x += math.pow(data_x[i], 3)
+        sum_four_power_x += math.pow(data_x[i], 4)
+        sum_xy += data_x[i] * data_y[i]
+        sum_sqare_xy += math.pow(data_x[i], 2) * data_y[i]
         i += 1;
-    average_x=sum_x/size
-    average_y=sum_y/size
+    average_x = sum_x / size
+    average_y = sum_y / size
     # print([[size, sum_x, sum_sqare_x, sum_y],
     #         [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
     #         [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]])
     return [[size, sum_x, sum_sqare_x, sum_y],
             [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
-            [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]]
+            [sum_sqare_x, sum_third_power_x, sum_four_power_x, sum_sqare_xy]]
+
 
 # Вычислить значение подобранной кривой
 
@@ -213,11 +205,13 @@ def calculate(data_x, parameters):
     print(data_y)
     return data_y
 
+
 # Функция draw рисует наши кривые на координатной плоскости
 def draw(data_x, data_y_new, data_y_old):
     plt.plot(data_x, data_y_new, label="подгоночная кривая", color="black")
     plt.scatter(data_x, data_y_old, label="табличные данные")
     plt.plot(data_x, data_y_old)
+
 
 print("Введите номер таблицы: ", end="")
 table = int(input())
@@ -268,37 +262,3 @@ match table:
         x = [2, 4, 5, 7, 9, 10, 12]
         y = [0.4, 0.16, 2.5, 4.9, 9, 100, 120]
         HelloWidget(x, y)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
