@@ -1,23 +1,26 @@
-import matplotlib.pyplot as plt #для графиков
+import matplotlib.pyplot as plt  # для графиков
 from pylab import mpl
 import math
 import numpy
 from Form import Application
+from scipy.signal import savgol_filter
 # Аппроксимация полиномиальной кривой с одной переменной
 
 
-import tkinter as tk #для интерфейса
+import tkinter as tk  # для интерфейса
+
 
 def formula():
     global x, y
     data = podgonka(x, y)
-    fin =  rf"${data[0][0]}*a_{0}+{data[0][1]}*a_{1} + {data[0][2]}*a_{2}={data[0][3]};$"
-    fin += rf" ${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"
-    fin += rf" ${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"
+    fin = []
+    fin += [rf"${data[0][0]}*a_{0}+{data[0][1]}*a_{1} + {data[0][2]}*a_{2}={data[0][3]};$"]
+    fin += [rf" ${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"]
+    fin += [rf" ${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"]
     root = tk.Toplevel()
-    # root = tk.Tk()
     app = Application(fin, master=root)
     app.mainloop()
+
 
 def mainWidget():
     root1 = tk.Tk()
@@ -40,6 +43,8 @@ def mainWidget():
               font=("Helvetica 11")).place(x=150, y=280)
 
     tk.mainloop()
+
+
 def tkek():
     root = tk.Tk()
     tk.Label(root,
@@ -61,7 +66,6 @@ def tkek():
     y5 = tk.Entry(root)
     y6 = tk.Entry(root)
     y7 = tk.Entry(root)
-
 
     x1.grid(row=0, column=1)
     x2.grid(row=0, column=2)
@@ -95,10 +99,10 @@ def tkek():
                  text="interpolation").grid(row=2)
         interpoll = tk.Entry(root)
         interpoll.grid(row=2, column=1)
-        X =  [float(x1.get()), float(x2.get()), float(x3.get()), float(x4.get()), float(x5.get()), float(x6.get()),
-              float(x7.get())]
-        Y =  [float(y1.get()), float(y2.get()), float(y3.get()), float(y4.get()), float(y5.get()), float(y6.get()),
-              float(y7.get())]
+        X = [float(x1.get()), float(x2.get()), float(x3.get()), float(x4.get()), float(x5.get()), float(x6.get()),
+             float(x7.get())]
+        Y = [float(y1.get()), float(y2.get()), float(y3.get()), float(y4.get()), float(y5.get()), float(y6.get()),
+             float(y7.get())]
         return X, Y
     else:
         X = [x1.get(), x2.get(), x3.get(), x4.get(), x5.get(), x6.get(),
@@ -112,6 +116,7 @@ def tkek():
             if Y[i] != "":
                 y[i] = float(Y[i])
     grafik()
+
 
 def grafik():
     global x, y
@@ -130,9 +135,10 @@ def grafik():
            r'a_{0}\sum x^{2}+a_{1}\sum x^{3} + a_{2}\sum x^{4}=\sum yx^{2} \end{matrix}\right.$'
     mpl.rcParams['font.sans-serif'] = ['Arial']
     mpl.rcParams['axes.unicode_minus'] = False
-    plt.title(rf"$y={param[0][0]}+{param[1][0]}x+{param[2][0]}x^{2}$")
+    plt.title(r"$y=a_{0}+a_{1}x+a_{2}x^{2}$")
     plt.legend(loc="upper left")
     plt.show()
+
 
 def HelloWidget(lstx, lsty):
     root1 = tk.Tk()
@@ -150,41 +156,49 @@ def HelloWidget(lstx, lsty):
               command=grafik,
               font=("Helvetica 11")).place(x=200, y=180)
 
-    # tk.Button(root1,
-    #           text='Formula',
-    #           command=formula,
-    #           font=("Helvetica 11")).place(x=150, y=280)
+    tk.Button(root1,
+              text='Formula',
+              command=formula,
+              font=("Helvetica 11")).place(x=150, y=280)
 
     tk.mainloop()
 
+
 # Функция podgonka высчитывает коэффициенты для системы нормальных уравнений
-def podgonka(data_x,data_y):
-    size=len(data_x)
-    i=0
+def podgonka(data_x, data_y):
+    size = len(data_x)
+    i = 0
     sum_x = 0
-    sum_sqare_x =0
+    sum_sqare_x = 0
     sum_third_power_x = 0
     sum_four_power_x = 0
+    average_x = 0
+    average_y = 0
     sum_y = 0
     sum_xy = 0
     sum_sqare_xy = 0
-    while i<size:
+    while i < size:
         sum_x += data_x[i]
         sum_y += data_y[i]
-        sum_sqare_x += math.pow(data_x[i],2)
-        sum_third_power_x +=math.pow(data_x[i],3)
-        sum_four_power_x +=math.pow(data_x[i],4)
-        sum_xy +=data_x[i]*data_y[i]
-        sum_sqare_xy +=math.pow(data_x[i],2)*data_y[i]
+        sum_sqare_x += math.pow(data_x[i], 2)
+        sum_third_power_x += math.pow(data_x[i], 3)
+        sum_four_power_x += math.pow(data_x[i], 4)
+        sum_xy += data_x[i] * data_y[i]
+        sum_sqare_xy += math.pow(data_x[i], 2) * data_y[i]
         i += 1;
+    average_x = sum_x / size
+    average_y = sum_y / size
     # print([[size, sum_x, sum_sqare_x, sum_y],
     #         [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
     #         [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]])
     return [[size, sum_x, sum_sqare_x, sum_y],
             [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
-            [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]]
+            [sum_sqare_x, sum_third_power_x, sum_four_power_x, sum_sqare_xy]]
+
 
 # Вычислить значение подобранной кривой
+
+
 def calculate(data_x, parameters):
     data_y = []
     for x in data_x:
@@ -192,95 +206,69 @@ def calculate(data_x, parameters):
     print(data_y)
     return data_y
 
+
 # Функция draw рисует наши кривые на координатной плоскости
 def draw(data_x, data_y_new, data_y_old):
+    global x, y
+    t = numpy.polyfit(x, y, 2)
+    f = numpy.poly1d(t)
+    # print(f)
+    x1 = numpy.linspace(-2, 4, 30)
+    # print(x1)
+    # print(f(x1))
     plt.plot(data_x, data_y_new, label="подгоночная кривая", color="black")
-    plt.scatter(data_x, data_y_old, label="табличные данные")
-    plt.plot(data_x, data_y_old)
+    # plt.plot(x1, f(x1), label="подгоночная кривая", color="black")
+    plt.scatter(sorted(data_x), sorted(data_y_old), label="табличные данные")
+    # plt.plot(sorted(data_x), sorted(data_y_old))
+
 
 print("Введите номер таблицы: ", end="")
-x = [-5, -3, -1, 1, 3, 5, 7, 9]
-y = [10, 12, 14, 30, 31, 25, 25, 15]
-HelloWidget(x, y)
 # table = int(input())
-# match table:
-#     case 0:
-#         x = ""
-#         y = ""
-#         x, y = tkek()
-#     case 1:
-#         x = [-2, 0, 1, 3, 5, 6, 8]
-#         y = [5, -1, 2, 10, 24, 36, 38]
-#         HelloWidget(x, y)
-#     case 2:
-#         x = [0.5, 1, 1.5, 2, 2.5, 3, 3.5]
-#         y = [0.4, 0.3, 1, 1.7, 2.1, 3.4, 4]
-#         HelloWidget(x, y)
-#     case 3:
-#         x = [0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8]
-#         y = [0.43, 0.94, 1.91, 3.01, 4, 4.56, 5]
-#         HelloWidget(x, y)
-#
-#     case 4:
-#         x = [4.5, 5.0, 5.5, 6.0, 6.5, 7, 7.5]
-#         y = [7.7, 9.4, 11.4, 13.6, 15.6, 17, 18]
-#         HelloWidget(x, y)
-#     case 5:
-#         x = [0, 0.5, 1, 1.5, 2, 2.5, 3]
-#         y = [25, 26, 4, 7, 6, 13, 20]
-#         HelloWidget(x, y)
-#     case 6:
-#         x = [1, 1.5, 2, 2.5, 3, 3.5, 4]
-#         y = [0.22, 23, 31, 43, 56, 82, 60]
-#         HelloWidget(x, y)
-#     case 7:
-#         x = [4.5, 5, 5.5, 6, 6.5, 7, 7.5]
-#         y = [7.7, 9.4, 11.4, 13.6, 15.6, 18.6, 20]
-#         HelloWidget(x, y)
-#     case 8:
-#         x = [-2, -1, 0, 1, 2, 3, 4]
-#         y = [4, 0, -1, 0, 5, 10, 12]
-#         HelloWidget(x, y)
-#     case 9:
-#         x = [0.1, 0.2, 0.4, 0.5, 0.6, 0.8, 1]
-#         y = [1, 2, 4, 7, 10, 16, 13]
-#         HelloWidget(x, y)
-#
-#     case 10:
-#         x = [2, 4, 5, 7, 9, 10, 12]
-#         y = [0.4, 0.16, 2.5, 4.9, 9, 100, 120]
-#         HelloWidget(x, y)
+table = 8
+match table:
+    case 0:
+        x = ""
+        y = ""
+        x, y = tkek()
+    case 1:
+        x = [-2, 0, 1, 3, 5, 6, 8]
+        y = [5, -1, 2, 10, 24, 36, 38]
+        HelloWidget(x, y)
+    case 2:
+        x = [0.5, 1, 1.5, 2, 2.5, 3, 3.5]
+        y = [0.4, 0.3, 1, 1.7, 2.1, 3.4, 4]
+        HelloWidget(x, y)
+    case 3:
+        x = [0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8]
+        y = [0.43, 0.94, 1.91, 3.01, 4, 4.56, 5]
+        HelloWidget(x, y)
 
+    case 4:
+        x = [4.5, 5.0, 5.5, 6.0, 6.5, 7, 7.5]
+        y = [7.7, 9.4, 11.4, 13.6, 15.6, 17, 18]
+        HelloWidget(x, y)
+    case 5:
+        x = [0, 0.5, 1, 1.5, 2, 2.5, 3]
+        y = [25, 26, 4, 7, 6, 13, 20]
+        HelloWidget(x, y)
+    case 6:
+        x = [1, 1.5, 2, 2.5, 3, 3.5, 4]
+        y = [0.22, 23, 31, 43, 56, 82, 60]
+        HelloWidget(x, y)
+    case 7:
+        x = [4.5, 5, 5.5, 6, 6.5, 7, 7.5]
+        y = [7.7, 9.4, 11.4, 13.6, 15.6, 18.6, 20]
+        HelloWidget(x, y)
+    case 8:
+        x = [-2, -1, 0, 1, 2, 3, 4]
+        y = [4, 0, -1, 0, 5, 10, 12]
+        HelloWidget(x, y)
+    case 9:
+        x = [0.1, 0.2, 0.4, 0.5, 0.6, 0.8, 1]
+        y = [1, 2, 4, 7, 10, 16, 13]
+        HelloWidget(x, y)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    case 10:
+        x = [2, 4, 5, 7, 9, 10, 12]
+        y = [0.4, 0.16, 2.5, 4.9, 9, 100, 120]
+        HelloWidget(x, y)
