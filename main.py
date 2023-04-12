@@ -212,10 +212,10 @@ def draw(data_x, data_y_new, data_y_old):
     global x, y
     t = numpy.polyfit(x, y, 2)
     f = numpy.poly1d(t)
-    print(f)
+    # print(f)
     x1 = numpy.linspace(-2, 4, 30)
-    print(x1)
-    print(f(x1))
+    # print(x1)
+    # print(f(x1))
     plt.plot(data_x, data_y_new, label="подгоночная кривая", color="black")
     # plt.plot(x1, f(x1), label="подгоночная кривая", color="black")
     plt.scatter(sorted(data_x), sorted(data_y_old), label="табличные данные")
