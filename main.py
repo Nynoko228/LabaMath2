@@ -120,6 +120,8 @@ def tkek():
 
 def grafik():
     global x, y
+    x1 = numpy.linspace(-2, 4, 30)
+    y1 = numpy.linspace(-1, 12, 30)
     data = podgonka(x, y)
     print(data)
     data1 = [data[0][-1:], data[1][-1:], data[2][-1:]]
@@ -128,7 +130,8 @@ def grafik():
     param = numpy.linalg.solve(data2, data1)
     print(numpy.linalg.solve(data2, data1))
     print("Новые Y")
-    newData = calculate(x, [param[2][0], param[1][0], param[0][0]])
+    # newData = calculate(x, [param[2][0], param[1][0], param[0][0]])
+    newData = calculate(x1, [param[2][0], param[1][0], param[0][0]])
     draw(x, newData, y)
     form = r'$\left\{\begin{matrix} a_{0}n+a_{1}\sum x + a_{2}\sum x^{2}=\sum y\\  ' \
            r'a_{0}\sum x+a_{1}\sum x^{2} + a_{2}\sum x^{3}=\sum yx \\ ' \
@@ -203,6 +206,7 @@ def calculate(data_x, parameters):
     data_y = []
     for x in data_x:
         data_y.append(parameters[2] + parameters[1] * x + parameters[0] * x * x)
+    print("data_y:")
     print(data_y)
     return data_y
 
@@ -210,19 +214,11 @@ def calculate(data_x, parameters):
 # Функция draw рисует наши кривые на координатной плоскости
 def draw(data_x, data_y_new, data_y_old):
     global x, y
-    t = numpy.polyfit(x, y, 2)
-    f = numpy.poly1d(t)
-    # print(f)
     x1 = numpy.linspace(-2, 4, 30)
-    # print(x1)
-    # print(f(x1))
-    plt.plot(data_x, data_y_new, label="подгоночная кривая", color="black")
-    # plt.plot(x1, f(x1), label="подгоночная кривая", color="black")
+    plt.plot(x1, data_y_new, label="подгоночная кривая", color="black")
     plt.scatter(sorted(data_x), sorted(data_y_old), label="табличные данные")
-    # plt.plot(sorted(data_x), sorted(data_y_old))
 
-
-print("Введите номер таблицы: ", end="")
+# print("Введите номер таблицы: ", end="")
 # table = int(input())
 table = 8
 match table:
