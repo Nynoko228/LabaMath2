@@ -165,8 +165,6 @@ def podgonka(data_x,data_y):
     sum_sqare_x =0
     sum_third_power_x = 0
     sum_four_power_x = 0
-    average_x = 0
-    average_y = 0
     sum_y = 0
     sum_xy = 0
     sum_sqare_xy = 0
@@ -179,8 +177,6 @@ def podgonka(data_x,data_y):
         sum_xy +=data_x[i]*data_y[i]
         sum_sqare_xy +=math.pow(data_x[i],2)*data_y[i]
         i += 1;
-    average_x=sum_x/size
-    average_y=sum_y/size
     # print([[size, sum_x, sum_sqare_x, sum_y],
     #         [sum_x, sum_sqare_x, sum_third_power_x, sum_xy],
     #         [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]])
@@ -189,8 +185,6 @@ def podgonka(data_x,data_y):
             [sum_sqare_x,sum_third_power_x,sum_four_power_x,sum_sqare_xy]]
 
 # Вычислить значение подобранной кривой
-
-
 def calculate(data_x, parameters):
     data_y = []
     for x in data_x:
