@@ -13,10 +13,15 @@ import tkinter as tk  # для интерфейса
 def formula():
     global x, y
     data = podgonka(x, y)
+    data1 = [data[0][-1:], data[1][-1:], data[2][-1:]]
+    data2 = [data[0][:-1], data[1][:-1], data[2][:-1]]
+    param = numpy.linalg.solve(data2, data1)
     fin = []
     fin += [rf"${data[0][0]}*a_{0}+{data[0][1]}*a_{1} + {data[0][2]}*a_{2}={data[0][3]};$"]
-    fin += [rf" ${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"]
-    fin += [rf" ${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"]
+    fin += [rf"${data[1][0]}*a_{0}+{data[1][1]}*a_{1} + {data[1][2]}*a_{2}={data[1][3]};$"]
+    fin += [rf"${data[2][0]}*a_{0}+{data[2][1]}*a_{1} + {data[2][2]}*a_{2}={data[2][3]};$"]
+    fin += ["Из системы уравнений получаем: " rf"$a_{0} = {param[0][0]}; a_{1} = {param[1][0]}; a_{2} = {param[2][0]}$"]
+    fin += [rf"$y = {param[2][0]}x^{2} + {param[1][0]}x + {param[0][0]}$"]
     root = tk.Toplevel()
     app = Application(fin, master=root)
     app.mainloop()
@@ -188,7 +193,7 @@ def podgonka(data_x, data_y):
         sum_four_power_x += math.pow(data_x[i], 4)
         sum_xy += data_x[i] * data_y[i]
         sum_sqare_xy += math.pow(data_x[i], 2) * data_y[i]
-        i += 1;
+        i += 1
     average_x = sum_x / size
     average_y = sum_y / size
     # print([[size, sum_x, sum_sqare_x, sum_y],
@@ -216,7 +221,7 @@ def draw(data_x, data_y_new, data_y_old):
     global x, y
     x1 = numpy.linspace(-2, 4, 30)
     plt.plot(x1, data_y_new, label="подгоночная кривая", color="black")
-    plt.scatter(sorted(data_x), sorted(data_y_old), label="табличные данные")
+    plt.scatter(data_x, data_y_old, label="табличные данные")
 
 # print("Введите номер таблицы: ", end="")
 # table = int(input())
